@@ -1,0 +1,34 @@
+node_modules/
+dist/
+.vite/
+.tools/
+
+# 本地环境与密钥
+.env
+.env.*
+!.env.example
+
+# SQLite 数据文件
+server/data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# 日志与其他
+*.log
+.DS_Store
+Thumbs.db
+coverage/
+
+*.qoder.site
+.qoder/
+
+# 图片资源以 assets-encoded 中的 base64 文本保存，安装时还原
+client/src/assets/portraits/*.webp
+client/src/assets/kenney-map/*.png
+
+# Sites Function 的构建产物，由 npm run build:function 生成
+functions/game.mjs
