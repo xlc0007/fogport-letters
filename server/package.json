@@ -1,0 +1,26 @@
+{
+  "name": "@fogport/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --clear-screen=false src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/game/events.test.ts src/game/protocol.test.ts src/game/demo.test.ts src/game/turnRules.test.ts src/game/engine.failures.test.ts src/game/highlights.test.ts src/game/revealGuard.test.ts src/game/sessionLifecycle.test.ts src/game/quest.test.ts src/game/beats.test.ts src/game/endings.test.ts src/ai/prompt.test.ts src/db/database.test.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.4.1",
+    "@fastify/static": "^10.1.10",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^18.0.9",
+    "fastify": "^5.12.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3"
+  }
+}
