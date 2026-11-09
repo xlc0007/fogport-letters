@@ -1,0 +1,1312 @@
+/* ================================================================
+   左侧图标栏 + 单张信息面板 + 全局可读性放大
+   此文件最后加载，覆盖前面的排版尺寸。
+================================================================ */
+
+/* ---------------------------------------------------------------
+   Layout
+---------------------------------------------------------------- */
+
+.game-content {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  gap: clamp(12px, 1.8vw, 28px);
+  padding-bottom: 12px;
+}
+
+.game-stage {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  justify-content: center;
+}
+
+.game-stage .story-column {
+  width: 100%;
+  max-width: 940px;
+  min-height: 0;
+}
+
+.story-inner,
+.composer-zone {
+  max-width: 860px;
+}
+
+/* ---------------------------------------------------------------
+   Icon rail
+---------------------------------------------------------------- */
+
+.info-rail {
+  display: flex;
+  flex: none;
+  width: 66px;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 2px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 18px 0 12px;
+  border-right: 1px solid var(--line-soft);
+  scrollbar-width: none;
+  z-index: 3;
+}
+
+.info-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail-button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 60px;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 2px 6px;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.rail-button:hover {
+  color: var(--text-soft);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.rail-button.is-primary {
+  color: var(--amber-bright);
+}
+
+.rail-button.is-warning {
+  color: var(--amber);
+}
+
+.rail-button.is-critical {
+  color: var(--cinnabar);
+}
+
+.rail-button.is-active {
+  border-left-color: var(--amber);
+  background: rgba(217, 177, 116, 0.06);
+  color: var(--text);
+}
+
+.rail-icon {
+  position: relative;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--line-soft);
+  border-radius: 9px;
+  background: rgba(8, 24, 24, 0.52);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.rail-button.is-primary .rail-icon {
+  border-color: rgba(217, 177, 116, 0.38);
+  background: rgba(217, 177, 116, 0.08);
+}
+
+.rail-button.is-active .rail-icon {
+  border-color: rgba(217, 177, 116, 0.55);
+  background: rgba(217, 177, 116, 0.12);
+}
+
+.rail-label {
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.rail-unread {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cinnabar);
+  box-shadow:
+    0 0 0 2px rgba(7, 22, 23, 0.9),
+    0 0 7px rgba(224, 138, 114, 0.75);
+  animation: unreadPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes unreadPulse {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-unread {
+    animation: none;
+  }
+}
+
+.rail-badge {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  padding: 0 4px;
+  border: 1px solid rgba(217, 177, 116, 0.28);
+  border-radius: 9px;
+  background: rgba(10, 29, 29, 0.9);
+  color: var(--amber-bright);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  line-height: 1;
+}
+
+.rail-button.is-critical .rail-badge {
+  border-color: rgba(224, 138, 114, 0.4);
+  color: var(--cinnabar);
+}
+
+/* ---------------------------------------------------------------
+   Info panel
+---------------------------------------------------------------- */
+
+.info-scrim {
+  position: absolute;
+  inset: 0 0 0 78px;
+  z-index: 40;
+  background: rgba(3, 10, 10, 0.22);
+  backdrop-filter: blur(1.2px);
+  animation: infoFadeIn 180ms ease both;
+}
+
+.info-panel {
+  position: absolute;
+  z-index: 41;
+  top: 4px;
+  bottom: auto;
+  left: 78px;
+  display: flex;
+  width: min(470px, calc(100% - 96px));
+  max-height: calc(100% - 14px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(217, 177, 116, 0.32);
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(217, 177, 116, 0.08), transparent 50%),
+    linear-gradient(165deg, #0d2423 0%, #071818 72%);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.48);
+  animation: infoPanelIn 220ms cubic-bezier(0.22, 0.8, 0.36, 1) both;
+}
+
+.info-panel-head {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 15px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.info-panel-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 13px;
+}
+
+.info-panel-icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  place-items: center;
+  border: 1px solid rgba(217, 177, 116, 0.3);
+  border-radius: 10px;
+  background: rgba(217, 177, 116, 0.07);
+  color: var(--amber-bright);
+}
+
+.info-panel-title-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.info-panel-head h2 {
+  margin-top: 3px;
+  font-family: var(--font-serif);
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.info-panel-progress {
+  padding: 3px 7px;
+  border: 1px solid var(--line-soft);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.info-close {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.info-close:hover {
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.info-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 20px 24px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 177, 116, 0.24) transparent;
+}
+
+.info-panel-foot {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 10px 20px 12px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 11.5px;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  color: var(--muted-dim);
+}
+
+/* ---------------------------------------------------------------
+   Panel content
+---------------------------------------------------------------- */
+
+.panel-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.quest-bare {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.quest-bare .quest-mainline {
+  margin-top: 0;
+}
+
+.panel-label {
+  margin-bottom: 7px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--amber-dim);
+}
+
+.panel-prose {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--text-soft);
+}
+
+.panel-summary {
+  font-size: 16.5px;
+}
+
+.panel-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text-soft);
+}
+
+.panel-list li::before {
+  content: "—";
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: var(--amber-dim);
+}
+
+.panel-empty {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.panel-note {
+  padding-left: 11px;
+  border-left: 1px solid var(--line);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.panel-clock {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid rgba(217, 177, 116, 0.24);
+  background: rgba(217, 177, 116, 0.04);
+}
+
+.panel-clock strong {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.panel-clock > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.panel-clock span {
+  font-size: 15px;
+  color: var(--text-soft);
+}
+
+.panel-clock em {
+  font-style: normal;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.panel-clock.is-warning strong {
+  color: var(--amber);
+}
+
+.panel-clock.is-critical strong {
+  color: var(--cinnabar);
+}
+
+.panel-rules {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 19px;
+  list-style: disc;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text-soft);
+}
+
+.panel-location-name {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.panel-exits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.panel-exits span {
+  padding: 6px 10px;
+  border: 1px solid var(--line-soft);
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.panel-items {
+  display: grid;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.panel-items li {
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.panel-items strong {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.panel-items p {
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.stat-description {
+  margin-top: 5px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* Panel overrides for reused blocks */
+
+.info-panel .quest-mainline {
+  font-size: 17px;
+}
+
+.info-panel .quest-row > p {
+  font-size: 14.5px;
+}
+
+.info-panel .quest-row > span {
+  font-size: 11.5px;
+}
+
+.info-panel .quest-eyebrow,
+.info-panel .quest-progress {
+  font-size: 10.5px;
+}
+
+.info-panel .quest-hint-toggle,
+.info-panel .quest-hint,
+.info-panel .quest-hint-detail,
+.info-panel .quest-hint-more,
+.info-panel .quest-hint-note {
+  font-size: 13.5px;
+}
+
+.info-panel .key-clue-list strong {
+  font-size: 15px;
+}
+
+.info-panel .key-clue-list p {
+  font-size: 13.5px;
+}
+
+.info-panel .stat-line {
+  font-size: 15px;
+}
+
+.info-panel .stat-condition {
+  font-size: 11px;
+}
+
+.info-panel .stat-value {
+  font-size: 16px;
+}
+
+.info-panel .clue-list p {
+  font-size: 14px;
+}
+
+.info-panel .clue-list li > span {
+  font-size: 11px;
+}
+
+.info-panel .relation-line strong {
+  font-size: 15.5px;
+}
+
+.info-panel .relation-role {
+  font-size: 12px;
+}
+
+.info-panel .relation-attitude {
+  font-size: 12.5px;
+}
+
+.info-panel .relation-details > summary {
+  font-size: 12.5px;
+}
+
+/* ---------------------------------------------------------------
+   Global readability
+---------------------------------------------------------------- */
+
+body {
+  font-size: 17.5px;
+}
+
+.game-header {
+  height: 88px;
+}
+
+.game-header .brand-name {
+  font-size: 19px;
+}
+
+.game-header .brand-sub {
+  font-size: 10px;
+}
+
+.game-header .mode-badge {
+  font-size: 11.5px;
+  min-height: 32px;
+}
+
+.game-header .header-button {
+  min-height: 38px;
+  margin-top: 0;
+  padding: 9px 13px;
+  font-size: 13px;
+}
+
+.progress-item {
+  font-size: 15px;
+}
+
+.progress-label {
+  font-size: 10.5px;
+}
+
+.clock-remaining {
+  font-size: 11.5px;
+}
+
+.eyebrow {
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+}
+
+.story-deck {
+  font-size: 17.5px;
+}
+
+.hero-meta {
+  font-size: 13px;
+}
+
+.narration {
+  font-size: 20.5px;
+  line-height: 1.95;
+}
+
+.turn-action p {
+  font-size: 16.5px;
+  line-height: 1.85;
+}
+
+.action-label {
+  font-size: 12px;
+}
+
+.turn-kicker {
+  font-size: 12px;
+}
+
+.turn-rail span {
+  font-size: 12px;
+}
+
+.event-chip {
+  font-size: 12.5px;
+  padding: 5px 9px;
+}
+
+.rule-label {
+  font-size: 11px;
+}
+
+.rule-chip {
+  font-size: 12px;
+}
+
+.turn-warning {
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+
+.turn-warning .inline-retry,
+.inline-retry {
+  font-size: 12.5px;
+  min-height: 34px;
+}
+
+.pending-narration {
+  font-size: 14px;
+}
+
+.pending-narration .wait-timer {
+  font-size: 11.5px;
+}
+
+.choices-head {
+  font-size: 11.5px;
+}
+
+.choice-button {
+  min-height: 44px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+}
+
+.choice-button .choice-tag {
+  font-size: 10.5px;
+}
+
+.choice-button .choice-cost {
+  font-size: 11px;
+}
+
+.action-input {
+  font-size: 18.5px;
+}
+
+.composer-bar .keyboard-hint {
+  font-size: 12px;
+}
+
+.send-button {
+  min-height: 44px;
+  padding: 11px 17px;
+  font-size: 14px;
+}
+
+.error-banner {
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.final-head h3 {
+  font-size: 18px;
+}
+
+.final-eyebrow {
+  font-size: 11px;
+}
+
+.final-time {
+  font-size: 12px;
+}
+
+.final-warning {
+  font-size: 13px;
+}
+
+.final-choice-head strong {
+  font-size: 15.5px;
+}
+
+.final-choice-head span {
+  font-size: 10px;
+}
+
+.final-choice-desc {
+  font-size: 13px;
+}
+
+.final-choice-req {
+  font-size: 12px;
+}
+
+.final-choice-button {
+  min-height: 42px;
+  font-size: 12.5px;
+}
+
+.final-cost {
+  font-size: 10.5px;
+}
+
+.final-foot {
+  font-size: 11px;
+}
+
+.ending-body p {
+  font-size: 19px;
+}
+
+.ending-causes h3 {
+  font-size: 12px;
+}
+
+.ending-causes li {
+  font-size: 14.5px;
+}
+
+.ending-stats span {
+  font-size: 12.5px;
+}
+
+.ending-footer-title {
+  font-size: 18px;
+}
+
+.ending-footer-text {
+  font-size: 14px;
+}
+
+.starting-guide > summary {
+  font-size: 15.5px;
+}
+
+.starting-guide-body p {
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.starting-guide-hint {
+  font-size: 12px;
+}
+
+.section-heading h3,
+.fold-title {
+  font-size: 18px;
+}
+
+.section-meta {
+  font-size: 11px;
+}
+
+.stat-line {
+  font-size: 14.5px;
+}
+
+.stat-condition {
+  font-size: 11px;
+}
+
+.stat-value {
+  font-size: 16px;
+}
+
+.clue-list p {
+  font-size: 14px;
+}
+
+.recap-summary {
+  font-size: 15px;
+}
+
+.recap-full {
+  font-size: 14px;
+}
+
+.recap-details > summary,
+.stat-help > summary {
+  font-size: 12.5px;
+}
+
+.recap-details-body li {
+  font-size: 13.5px;
+}
+
+.recap-label {
+  font-size: 12px;
+}
+
+.location-block > p {
+  font-size: 14px;
+}
+
+.location-exits {
+  font-size: 12px !important;
+}
+
+.state-role {
+  font-size: 12px;
+}
+
+.quest-mainline {
+  font-size: 16.5px;
+}
+
+.quest-row > p {
+  font-size: 14px;
+}
+
+.quest-row > span {
+  font-size: 11px;
+}
+
+.quest-chapter {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px dashed var(--line-soft);
+}
+
+.quest-chapter > span {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--amber-dim);
+}
+
+.quest-chapter > p {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.info-panel .quest-chapter > p {
+  font-size: 13.5px;
+}
+
+@media (max-width: 520px) {
+  .quest-chapter > p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 12px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+.quest-eyebrow,
+.quest-progress {
+  font-size: 10.5px;
+}
+
+.quest-hint,
+.quest-hint-detail {
+  font-size: 13.5px;
+}
+
+.quest-hint-toggle,
+.quest-hint-more {
+  font-size: 12px;
+}
+
+.quest-hint-note {
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------------
+   Animations
+---------------------------------------------------------------- */
+
+@keyframes infoFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes infoPanelIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes infoSheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Responsive
+---------------------------------------------------------------- */
+
+@media (max-width: 980px) {
+  .game-header {
+    height: 72px;
+  }
+
+  .game-stage .story-column {
+    max-width: none;
+  }
+
+  .info-panel {
+    position: fixed;
+    top: auto;
+    right: auto;
+    bottom: 12px;
+    left: 80px;
+    width: min(470px, calc(100% - 92px));
+    max-height: min(82dvh, 760px);
+    border-radius: 12px;
+    animation: infoSheetIn 220ms cubic-bezier(0.22, 0.8, 0.36, 1) both;
+  }
+
+  .info-scrim {
+    inset: 0 0 0 62px;
+    background: rgba(3, 10, 10, 0.5);
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    font-size: 17.5px;
+  }
+
+  .game-shell {
+    padding: 0 10px;
+  }
+
+  .game-header {
+    height: 64px;
+    gap: 8px;
+  }
+
+  .game-header .brand-name {
+    font-size: 17px;
+  }
+
+  .game-header .header-button {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .game-header .mode-badge {
+    min-height: 30px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .game-content {
+    gap: 8px;
+    padding-bottom: 0;
+  }
+
+  .info-rail {
+    width: 54px;
+    padding-top: 10px;
+  }
+
+  .rail-button {
+    min-height: 54px;
+    padding: 6px 0 4px;
+  }
+
+  .rail-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .rail-icon .game-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .rail-label {
+    font-size: 11.5px;
+  }
+
+  .rail-badge {
+    top: 2px;
+    right: 1px;
+    min-width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+
+  .narration {
+    font-size: 19px;
+    line-height: 1.95;
+  }
+
+  .story-deck {
+    font-size: 17px;
+  }
+
+  .hero-meta {
+    font-size: 12.5px;
+  }
+
+  .turn-action p {
+    font-size: 15.5px;
+  }
+
+  .choice-button {
+    font-size: 13px;
+    min-height: 42px;
+  }
+
+  .action-input {
+    font-size: 18px;
+  }
+
+  .send-button {
+    font-size: 13.5px;
+  }
+
+  .final-choice-desc {
+    font-size: 12px;
+  }
+
+  .final-choice-req {
+    font-size: 11.5px;
+  }
+
+  .final-choice-button {
+    font-size: 12px;
+  }
+
+  .ending-body p {
+    font-size: 18px;
+  }
+
+  .info-panel-head {
+    padding: 16px 17px 13px;
+  }
+
+  .info-panel-head h2 {
+    font-size: 24px;
+  }
+
+  .info-panel-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .info-panel-icon .game-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .info-panel-body {
+    padding: 17px 17px 20px;
+  }
+
+  .info-panel-foot {
+    padding: 9px 17px 10px;
+    font-size: 10.5px;
+  }
+
+  .info-panel {
+    left: 64px;
+    width: min(470px, calc(100% - 72px));
+  }
+}
+
+@media (max-width: 520px) {
+  .game-shell {
+    padding: 0 6px;
+  }
+
+  .game-header {
+    height: 60px;
+  }
+
+  .game-header .brand {
+    gap: 8px;
+  }
+
+  .game-header .brand .seal {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .game-header .brand-name {
+    font-size: 16px;
+  }
+
+  .game-content {
+    gap: 6px;
+  }
+
+  .info-rail {
+    width: 50px;
+    padding-top: 7px;
+  }
+
+  .rail-button {
+    min-height: 51px;
+    gap: 3px;
+    padding: 5px 0 3px;
+  }
+
+  .rail-icon {
+    width: 31px;
+    height: 31px;
+    border-radius: 7px;
+  }
+
+  .rail-icon .game-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .rail-label {
+    font-size: 11.5px;
+  }
+
+  .rail-badge {
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    font-size: 8px;
+  }
+
+  .narration {
+    font-size: 18.5px;
+  }
+
+  .game-header .header-button {
+    font-size: 11px;
+    padding: 7px 7px;
+  }
+
+  .game-header .mode-badge {
+    font-size: 10.5px;
+    padding: 5px 6px;
+  }
+
+  .choices-head {
+    font-size: 10.5px;
+  }
+
+  .choice-button {
+    font-size: 12.5px;
+  }
+
+  .event-chip {
+    font-size: 12px;
+  }
+
+  .rule-chip {
+    font-size: 11.5px;
+  }
+
+  .ending-body p {
+    font-size: 18px;
+  }
+
+  .info-scrim {
+    inset: 0 0 0 56px;
+  }
+
+  .info-panel {
+    right: auto;
+    bottom: 6px;
+    left: 58px;
+    width: calc(100% - 64px);
+    max-height: 84dvh;
+  }
+
+  .info-panel-head {
+    padding: 14px 14px 12px;
+  }
+
+  .info-panel-head h2 {
+    font-size: 22px;
+  }
+
+  .info-panel-body {
+    padding: 15px 14px 18px;
+  }
+
+  .panel-clock strong {
+    font-size: 38px;
+  }
+
+  .panel-location-name {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 360px) {
+  .info-panel-progress {
+    display: none;
+  }
+
+  .info-panel-head {
+    gap: 10px;
+    padding: 13px 12px 11px;
+  }
+
+  .info-panel-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .info-panel-icon .game-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .info-panel-head h2 {
+    font-size: 20px;
+    white-space: nowrap;
+  }
+
+  .info-close {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 360px) {
+  .final-choices {
+    max-height: 46dvh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
