@@ -1,0 +1,309 @@
+/* 角色立绘：人物信息卡与结局页 */
+
+.people-gallery {
+  display: grid;
+  gap: 12px;
+}
+
+.person-card {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  padding: 10px;
+  border: 1px solid var(--line-soft);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0)),
+    rgba(7, 22, 22, 0.5);
+}
+
+.person-card-self {
+  border-color: rgba(217, 177, 116, 0.34);
+  background:
+    linear-gradient(145deg, rgba(217, 177, 116, 0.06), rgba(255, 255, 255, 0)),
+    rgba(7, 22, 22, 0.62);
+}
+
+.person-card-memory {
+  border-style: dashed;
+  border-color: rgba(217, 177, 116, 0.28);
+  background:
+    linear-gradient(145deg, rgba(217, 177, 116, 0.04), rgba(255, 255, 255, 0)),
+    rgba(7, 22, 22, 0.48);
+}
+
+.person-portrait {
+  position: relative;
+  width: 106px;
+  flex: none;
+  align-self: flex-start;
+  overflow: hidden;
+  border: 1px solid rgba(217, 177, 116, 0.22);
+  background: #0a1c1c;
+}
+
+.person-portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.person-flag {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  padding: 2px 5px;
+  border: 1px solid rgba(217, 177, 116, 0.3);
+  background: rgba(5, 17, 18, 0.86);
+  color: var(--amber-bright);
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.person-info {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.person-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.person-head h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.person-role {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.person-status {
+  max-width: 44%;
+  flex: none;
+  text-align: right;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--amber-dim);
+}
+
+.person-note {
+  margin-top: 9px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-soft);
+}
+
+.person-card .meter-relation {
+  margin-top: 9px;
+}
+
+.person-card .relation-details {
+  margin-top: 7px;
+}
+
+.person-card .relation-details > summary {
+  font-size: 12px;
+}
+
+.person-card .relation-details .panel-list {
+  margin-top: 6px;
+}
+
+.person-card .relation-details .panel-list li {
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+/* 结局页立绘 */
+
+.ending-heading {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 3vw, 32px);
+  margin: 12px 0 26px;
+}
+
+.ending-heading-copy {
+  min-width: 0;
+}
+
+.ending-heading h2 {
+  max-width: 12em;
+  margin: 6px 0 0;
+}
+
+.ending-portrait {
+  width: clamp(112px, 16vw, 170px);
+  flex: none;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid rgba(217, 177, 116, 0.42);
+  background: rgba(8, 24, 24, 0.72);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.2);
+  transform: rotate(-1.5deg);
+}
+
+.ending-portrait img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.ending-portrait figcaption {
+  margin-top: 6px;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--muted);
+}
+
+@media (max-width: 760px) {
+  .person-card {
+    gap: 11px;
+    padding: 9px;
+  }
+
+  .person-portrait {
+    width: 88px;
+  }
+
+  .person-head h3 {
+    font-size: 17px;
+  }
+
+  .person-head .person-role {
+    font-size: 11px;
+  }
+
+  .person-status {
+    max-width: 42%;
+    font-size: 10.5px;
+  }
+
+  .person-note {
+    margin-top: 7px;
+    font-size: 12.5px;
+  }
+
+  .ending-heading {
+    gap: 16px;
+  }
+
+  .ending-portrait {
+    width: 112px;
+  }
+
+  .ending-portrait figcaption {
+    font-size: 9.5px;
+  }
+}
+
+@media (max-width: 520px) {
+  .person-card {
+    gap: 9px;
+    padding: 8px;
+  }
+
+  .person-portrait {
+    width: 78px;
+  }
+
+  .person-head h3 {
+    font-size: 16.5px;
+  }
+
+  .person-role {
+    font-size: 10.5px;
+  }
+
+  .person-status {
+    max-width: 42%;
+    font-size: 10px;
+  }
+
+  .person-note {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .person-card .relation-details > summary {
+    font-size: 11.5px;
+  }
+
+  .person-card .relation-details .panel-list li {
+    font-size: 12px;
+  }
+
+  .ending-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .ending-portrait {
+    width: 120px;
+  }
+
+  .ending-heading h2 {
+    margin-top: 4px;
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .person-portrait {
+    width: 70px;
+  }
+
+  .person-head {
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .person-head h3 {
+    font-size: 16px;
+  }
+
+  .person-status {
+    max-width: none;
+    text-align: left;
+    font-size: 9.5px;
+  }
+
+  .person-note {
+    font-size: 11.5px;
+  }
+
+  .ending-portrait {
+    width: 104px;
+  }
+
+  .ending-heading h2 {
+    font-size: 36px;
+  }
+}
