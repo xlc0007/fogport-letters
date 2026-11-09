@@ -58,10 +58,3 @@ npm run build
 角色立绘与地图位图是二进制资源，在线版本已包含全部素材。仓库中的 `assets-encoded/` 保存了用于文本分发的 base64 资源；在完整本地项目中，`npm install` 会通过 `scripts/prepare-assets.mjs` 还原缺失图片。
 
 地图底图使用 [Kenney Map Pack](https://kenney.nl/assets/map-pack)（CC0）；界面图标来自 [game-icons.net](https://game-icons.net)（CC BY 3.0，作者 Lorc / Delapouite）。完整署名与许可见 `client/src/assets/kenney-map/License.txt` 与项目文档。
-
-## 参赛信息
-
-- 作品：雾港来信
-- 类型：Lifehack
-- 作者：熊诗毅、黄广程
-- 在线体验：<https://fogport-letters-e3phwckhb92.qoder.zone>
