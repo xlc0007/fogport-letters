@@ -1,0 +1,29 @@
+{
+  "name": "fogport-letters",
+  "version": "0.1.0",
+  "private": true,
+  "description": "《雾港来信》——由 Qwen 驱动的中文文字冒险游戏",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c yellow,cyan \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
+    "dev:server": "npm run dev --workspace server",
+    "dev:client": "npm run dev --workspace client",
+    "build": "npm run typecheck && npm run build --workspace client",
+    "build:hosted": "npm run typecheck && npm run build:hosted --workspace client",
+    "start": "npm run start --workspace server",
+    "typecheck": "npm run typecheck --workspace shared && npm run typecheck --workspace server && npm run typecheck --workspace client",
+    "test": "npm run test --workspace server",
+    "postinstall": "node scripts/prepare-assets.mjs",
+    "build:function": "esbuild server/src/hosted/gameHost.ts --bundle --format=esm --platform=neutral --target=es2022 --outfile=functions/game.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.7"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
